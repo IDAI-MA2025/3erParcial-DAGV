@@ -78,10 +78,10 @@
 
       <label for="pan">Tipo de Pan:</label>
           <div class="radio-list">
-              <label for="clasico"><input type="radio">Clásico</label>
-              <label for="ajonjoli"><input type="radio">Con Ajonjolí (+20 MXN)</label>
-              <label for="integral"><input type="radio">Integral (+20 MXN)</label>
-              <label for="brioche"><input type="radio">Brioche (+50 MXN)</label>
+              <label for="clasico"><input type="radio" name="pan" value="cl">Clásico</label>
+              <label for="ajonjoli"><input type="radio"name="pan" value="aj">Con Ajonjolí (+20 MXN)</label>
+              <label for="integral"><input type="radio" name="pan" value="in">Integral (+20 MXN)</label>
+              <label for="brioche"><input type="radio" name="pan" value="br">Brioche (+50 MXN)</label>
           </div>
 
       <label>Ingredientes adicionales (5.00 MXN c/u):</label>
@@ -118,7 +118,7 @@
 
       <div class="total" id="total">Total: $0.00</div>
 
-      <button type="button">Calcular Total</button>
+      <button type="button" onclick="calcularTotal()">Calcular Total</button>
     </form>
     <div class="imagenes">
       <img src="" alt="">
@@ -127,4 +127,50 @@
     </div>
   </div>
 </body>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+        var formulario = document.getElementById("pedidoForm");
+        var totalDiv = document.getElementById('total');
+        var cantidad = formulario.cantidad.value;
+        
+        function calcularTotal(){
+          var totalh = 0;
+
+          if(formulario.especialidad.value == "clasica"){
+            totalh = 80;
+          } else if(formulario.especialidad.value == "bbq"){
+            totalh = 100;
+          } else if(formulario.especialidad.value == "tocino"){
+            totalh = 120;
+          } else if(formulario.especialidad.value == "doble"){
+            totalh = 150;
+          } else if(formulario.especialidad.value == "hawaiana"){
+            totalh = 180;
+          }
+          if(formulario.pan.value == "cl"){
+            totalh = totalh + 0;
+          } else if(formulario.pan.value == "in"){
+            totalh = totalh + 20;
+          }else if(formulario.pan.value == "aj"){
+            totalh = totalh + 20;
+          } else if(formulario.pan.value == "br"){
+            totalh = totalh + 50;
+          }
+          let ingredientes = formulario.querySelectorAll('input[type="checkbox"]:not(#domicilio):checked');
+      totalh += ingredientes.length * 5;
+
+    
+      totalh = (totalh * cantidad);
+
+      if(formulario.domicilio.checked){
+        totalh += 30;
+      }
+      totalDiv.innerText = "$ " + (totalh) +" MXN ";
+        }
+        
+        formulario.addEventListener('input', calcularTotal);
+        formulario.addEventListener('change', calcularTotal);
+        calcularTotal();
+  });
+</script>
 </html>
